@@ -1,5 +1,5 @@
 <template>
-    <div class="p-6 bg-gray-100 min-h-screen font-inter">
+    <div class="p-2 bg-gray-100 min-h-screen font-inter">
       <div class="max-w-4xl mx-auto p-10">
         <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center">Thông tin tài khoản</h3>
   
