@@ -1,8 +1,13 @@
 <template>
   <div class="p-6 bg-gray-100 min-h-screen font-inter">
-    <h3 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6">Chi tiết khách hàng</h3>
+    <!-- Header + Nút thêm -->
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-10 gap-3 mb-10">
+      <h3 class="text-xl md:text-2xl font-semibold text-gray-800">Chi tiết khách hàng</h3>
+      <button class="add-button ">+ Thêm mới khách hàng</button>
+    </div>
 
-    <div class="flex flex-col gap-y-6">
+    <!-- Danh sách khách hàng -->
+    <div class="flex flex-col gap-y-6 ">
       <div
         v-for="customer in customers"
         :key="customer.id"
@@ -32,6 +37,7 @@
         <!-- Cột 3: Nút -->
         <div class="action-button-wrapper">
           <button class="action-button">Lịch sử đặt phòng</button>
+          <button class="edit-button">Chỉnh sửa</button>
         </div>
       </div>
     </div>
@@ -71,7 +77,12 @@ const customers = ref([
 .font-inter {
   font-family: 'Inter', sans-serif;
 }
-
+h3{
+  margin-bottom: 10px;
+}
+button {
+  margin-bottom: 10px;
+}
 .bg-card {
   background-color: #ffffff;
   border-radius: 0.75rem;
@@ -117,7 +128,7 @@ const customers = ref([
 }
 
 .customer-name {
-  font-size: 1rem; /* Nhỏ lại một chút */
+  font-size: 1rem;
   font-weight: 600;
   color: #006d77;
   white-space: nowrap;
@@ -153,23 +164,61 @@ const customers = ref([
   }
 }
 
+/* Nút hành động */
 .action-button-wrapper {
-  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
 }
 
+.action-button,
+.edit-button {
+  width: 180px;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+/* Nút lịch sử */
 .action-button {
   background-color: #199db2;
   color: white;
-  padding: 0.4rem 1.25rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: 0.85rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  transition: background-color 0.2s ease;
-  white-space: nowrap;
 }
 
 .action-button:hover {
   background-color: #147e90;
+}
+
+/* Nút chỉnh sửa */
+.edit-button {
+  background-color: #e0f2f1;
+  color: #007c91;
+  border: 1px solid #b2dfdb;
+}
+
+.edit-button:hover {
+  background-color: #b2dfdb;
+}
+
+/* Nút thêm */
+.add-button {
+  background-color: #007c91;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.add-button:hover {
+  background-color: #006072;
 }
 </style>

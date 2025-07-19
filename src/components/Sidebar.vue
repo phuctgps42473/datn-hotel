@@ -14,6 +14,15 @@
       </router-link>
 
       <router-link
+  to="/rooms"
+  class="nav-link"
+  :class="{ active: route.path.startsWith('/rooms') }"
+>
+  <span class="icon"><i class="fa-solid fa-door-open"></i></span>
+  <span class="label">Danh sách phòng</span>
+</router-link>
+
+      <router-link
         to="/employees"
         class="nav-link"
         :class="{ active: route.path.startsWith('/employees') }"
