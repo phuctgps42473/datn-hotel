@@ -1,8 +1,9 @@
 <template>
   <div class="sidebar">
-    <div class="sidebar-header">
-      <h2>ELARIS HOTEL</h2>
-    </div>
+  <div class="sidebar-header">
+  <RouterLink to="/" class="block pl-2"> <h2>ELARIS HOTEL</h2>
+  </RouterLink>
+</div>
     <nav class="nav-links">
       <router-link
         to="/"

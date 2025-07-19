@@ -39,7 +39,7 @@
         </div>
 
         <!-- Button -->
-        <div class=" mt-6 md:mt-0 md:ml-6">
+        <div class="mt-6 md:mt-0 md:ml-6">
           <button class="bg-[#199DB2] text-white px-6 py-3 rounded-lg hover:bg-[#147e90] transition duration-200 font-semibold shadow-md">
             Xác nhận đơn
           </button>
