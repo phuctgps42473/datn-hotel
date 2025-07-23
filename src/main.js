@@ -1,14 +1,11 @@
-// import './assets/main.css'
-// import './assets/main.css'
-// import { createApp } from 'vue'
-// import App from './App.vue'
-// import router from './router'
-// createApp(App).mount('#app')
-
 import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router' // Đã có file router
 
-createApp(App).use(router).mount('#app')
+import { createPinia } from 'pinia'
 
+const app = createApp(App)
+app.use(createPinia())
+app.use(router)
+app.mount('#app')

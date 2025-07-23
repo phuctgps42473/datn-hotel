@@ -1,31 +1,8 @@
 <template>
-<<<<<<< HEAD
-  <div class="p-6 bg-gray-100 min-h-screen font-inter">
-    <div class="max-w-4xl mx-auto p-10">
-      <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center">Thông tin tài khoản</h3>
-
-      <div class="bg-white p-10 rounded-2xl shadow-lg border border-gray-300 space-y-12">
-        <!-- Ảnh đại diện -->
-        <div class="flex flex-col sm:flex-row items-center gap-6">
-          <img
-            :src="user.avatar"
-            alt="Avatar"
-            class="w-24 h-24 rounded-full border-4 border-[#199DB2] object-cover shadow-md"
-          />
-          <div class="text-center sm:text-left">
-            <p class="text-2xl font-semibold text-[#199DB2] mb-1">{{ user.name }}</p>
-            <p class="text-gray-500 mb-2">{{ user.role }}</p>
-            <label
-              class="block text-sm text-[#199DB2] cursor-pointer hover:underline select-none"
-            >
-              <input type="file" hidden @change="updateAvatar" />
-              Thay đổi ảnh đại diện
-            </label>
-=======
     <div class="p-2 bg-gray-100 min-h-screen font-inter">
       <div class="max-w-4xl mx-auto p-10">
         <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center">Thông tin tài khoản</h3>
-  
+
         <div
           class="bg-white p-10 rounded-2xl shadow-lg border border-gray-300 space-y-12"
         >
@@ -37,16 +14,15 @@
               class="w-24 h-24 rounded-full border-4 border-[#199DB2] object-cover shadow-md"
             />
             <div class="text-center sm:text-left">
-              <p class="text-2xl font-semibold text-[#199DB2] mb-1">{{ user.name }}</p>
-              <p class="text-gray-500 mb-2">{{ user.role }}</p>
-              <label
+              <p class="text-2xl font-semibold text-[#199DB2] mb-1">{{ userInfo.fullname }}</p>
+              <p class="text-gray-500 mb-2">{{ userInfo.role }}</p>
+              <!-- <label
                 class="block text-sm text-[#199DB2] cursor-pointer hover:underline select-none"
               >
                 <input type="file" hidden @change="updateAvatar" />
                 Thay đổi ảnh đại diện
-              </label>
+              </label> -->
             </div>
->>>>>>> bbbe5d6c1772aa7dea9d1f95f707cc8605ab4207
           </div>
         </div>
 
@@ -56,7 +32,7 @@
             <label class="label" for="name">Họ và tên</label>
             <input
               id="name"
-              v-model="user.name"
+              v-model="userInfo.fullname"
               type="text"
               class="input-field"
               placeholder="Nhập họ và tên"
@@ -66,17 +42,17 @@
             <label class="label" for="email">Email</label>
             <input
               id="email"
-              v-model="user.email"
+              v-model="userInfo.email"
               type="email"
               class="input-field"
               placeholder="Nhập email"
             />
           </div>
-          <div>
+          <!-- <div>
             <label class="label" for="phone">Số điện thoại</label>
             <input
               id="phone"
-              v-model="user.phone"
+              v-model="userInfo.phone"
               type="tel"
               class="input-field"
               placeholder="Nhập số điện thoại"
@@ -91,11 +67,11 @@
               class="input-field"
               placeholder="Mô tả về bạn"
             />
-          </div>
+          </div> -->
         </div>
 
         <!-- Đổi mật khẩu -->
-        <div>
+        <!-- <div>
           <h4 class="text-xl font-semibold text-[#199DB2] mb-6">🔐 Đổi mật khẩu</h4>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -119,27 +95,31 @@
               />
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Nút lưu + đăng xuất -->
         <div class="flex justify-end mt-6 gap-4">
           <button @click="logout" class="button-logout">
             🚪 Đăng xuất
           </button>
-          <button @click="saveProfile" class="button-save">
+          <!-- <button @click="saveProfile" class="button-save">
             💾 Lưu thay đổi
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
+import { useUserStore } from '@/stores/user';
 import { reactive } from 'vue'
-// Nếu bạn dùng vue-router để điều hướng khi đăng xuất:
 import { useRouter } from 'vue-router'
 const router = useRouter()
+
+
+const userStore = useUserStore();
+const userInfo = userStore.userInfo;
+
 
 const user = reactive({
   name: 'LÊ LÊ',

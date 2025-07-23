@@ -4,17 +4,17 @@
     <div class="header-top-row">
       <!-- Left Section: Greeting and Date -->
       <div class="greeting-section">
-        <h1 class="greeting-text">Xin chào, Lê Lê</h1>
+        <h1 class="greeting-text">Xin chào, {{ userInfo.fullname }}</h1>
         <p class="greeting-date">Ngày mới tốt lành</p>
       </div>
 
       <!-- Right Section: Notifications and User Profile -->
       <div class="user-info-section">
         <!-- 👇 Chuyển đến trang /notifications khi nhấn -->
-        <button class="notification-button" @click="router.push('/notifications')">
+        <!-- <button class="notification-button" @click="router.push('/notifications')">
           <i class="fa-solid fa-bell notification-icon"></i>
           <span class="notification-count">3</span>
-        </button>
+        </button> -->
 
         <!-- 👇 Chuyển đến trang /profile khi nhấn -->
         <div class="user-profile" @click="router.push('/profile')">
@@ -24,8 +24,8 @@
             class="user-avatar"
           >
           <div class="user-details">
-            <span class="user-name">LÊ LÊ</span>
-            <span class="user-role">Admin</span>
+            <span class="user-name">{{ userInfo.fullname }}</span>
+            <span class="user-role">{{ userInfo.role }}</span>
           </div>
           <i class="fa-solid fa-chevron-down user-dropdown-icon"></i>
         </div>
@@ -59,7 +59,13 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user';
+
 const router = useRouter()
+
+const userStore = useUserStore();
+const userInfo = userStore.userInfo;
+
 </script>
 
 <style scoped>
