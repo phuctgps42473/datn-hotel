@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <div class="p-6 bg-gray-100 min-h-screen font-inter">
     <div class="max-w-4xl mx-auto p-10">
       <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center">Thông tin tài khoản</h3>
@@ -15,38 +14,10 @@
           <div class="text-center sm:text-left">
             <p class="text-2xl font-semibold text-[#199DB2] mb-1">{{ user.name }}</p>
             <p class="text-gray-500 mb-2">{{ user.role }}</p>
-            <label
-              class="block text-sm text-[#199DB2] cursor-pointer hover:underline select-none"
-            >
+            <label class="block text-sm text-[#199DB2] cursor-pointer hover:underline select-none">
               <input type="file" hidden @change="updateAvatar" />
               Thay đổi ảnh đại diện
             </label>
-=======
-    <div class="p-2 bg-gray-100 min-h-screen font-inter">
-      <div class="max-w-4xl mx-auto p-10">
-        <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center">Thông tin tài khoản</h3>
-  
-        <div
-          class="bg-white p-10 rounded-2xl shadow-lg border border-gray-300 space-y-12"
-        >
-          <!-- Ảnh đại diện -->
-          <div class="flex flex-col sm:flex-row items-center gap-6">
-            <img
-              :src="user.avatar"
-              alt="Avatar"
-              class="w-24 h-24 rounded-full border-4 border-[#199DB2] object-cover shadow-md"
-            />
-            <div class="text-center sm:text-left">
-              <p class="text-2xl font-semibold text-[#199DB2] mb-1">{{ user.name }}</p>
-              <p class="text-gray-500 mb-2">{{ user.role }}</p>
-              <label
-                class="block text-sm text-[#199DB2] cursor-pointer hover:underline select-none"
-              >
-                <input type="file" hidden @change="updateAvatar" />
-                Thay đổi ảnh đại diện
-              </label>
-            </div>
->>>>>>> bbbe5d6c1772aa7dea9d1f95f707cc8605ab4207
           </div>
         </div>
 
@@ -123,12 +94,8 @@
 
         <!-- Nút lưu + đăng xuất -->
         <div class="flex justify-end mt-6 gap-4">
-          <button @click="logout" class="button-logout">
-            🚪 Đăng xuất
-          </button>
-          <button @click="saveProfile" class="button-save">
-            💾 Lưu thay đổi
-          </button>
+          <button @click="logout" class="button-logout">🚪 Đăng xuất</button>
+          <button @click="saveProfile" class="button-save">💾 Lưu thay đổi</button>
         </div>
       </div>
     </div>
@@ -137,7 +104,6 @@
 
 <script setup>
 import { reactive } from 'vue'
-// Nếu bạn dùng vue-router để điều hướng khi đăng xuất:
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
@@ -165,10 +131,9 @@ function updateAvatar(event) {
 }
 
 function logout() {
-  const confirmLogout = confirm('Bạn có chắc chắn muốn đăng xuất?')
-  if (confirmLogout) {
+  if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
     alert('Bạn đã đăng xuất!')
-    router.push('/admin-login') // hoặc '/login' tùy app
+    router.push('/admin-login')
   }
 }
 </script>
@@ -210,31 +175,6 @@ function logout() {
   background-color: #fff;
 }
 
-.bg-white.p-10.rounded-2xl.shadow-lg.border {
-  padding: 2.5rem !important;
-  border-radius: 1.5rem !important;
-  box-shadow: 0 10px 20px rgba(25, 157, 178, 0.1) !important;
-  border-color: #cbd5e1 !important;
-}
-
-.flex.flex-col.sm\:flex-row.items-center.gap-6 {
-  gap: 1.5rem;
-}
-
-/* Nút thay đổi ảnh đại diện cách avatar */
-.flex.flex-col.sm\:flex-row.items-center.gap-6 > div label {
-  margin-left: 0;
-  display: inline-block;
-  margin-top: 6px;
-}
-
-@media (min-width: 640px) {
-  .flex.flex-col.sm\:flex-row.items-center.gap-6 > div label {
-    margin-left: 1.2rem;
-    margin-top: 0;
-  }
-}
-
 button.button-save {
   padding: 14px 28px;
   border-radius: 14px;
@@ -271,6 +211,30 @@ button.button-logout:hover {
 
 .flex.justify-end.mt-6 {
   margin-top: 1.5rem;
+}
+
+.bg-white.p-10.rounded-2xl.shadow-lg.border {
+  padding: 2.5rem !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 10px 20px rgba(25, 157, 178, 0.1) !important;
+  border-color: #cbd5e1 !important;
+}
+
+.flex.flex-col.sm\:flex-row.items-center.gap-6 {
+  gap: 1.5rem;
+}
+
+.flex.flex-col.sm\:flex-row.items-center.gap-6 > div label {
+  margin-left: 0;
+  display: inline-block;
+  margin-top: 6px;
+}
+
+@media (min-width: 640px) {
+  .flex.flex-col.sm\:flex-row.items-center.gap-6 > div label {
+    margin-left: 1.2rem;
+    margin-top: 0;
+  }
 }
 
 @media (max-width: 640px) {

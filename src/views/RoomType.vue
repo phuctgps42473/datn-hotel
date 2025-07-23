@@ -13,27 +13,28 @@
       <table class="w-full table-auto divide-y divide-gray-400">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tên loại</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Giá mặc định</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Mô tả</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hành động</th>
-          </tr>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tên loại</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Giá mặc định</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Mô tả</th>
+          <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Hành động</th>
+        </tr>
+
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
           <tr v-for="roomType in roomTypes" :key="roomType.id">
             <td class="px-4 py-2 text-sm text-gray-900">{{ roomType.id }}</td>
             <td class="px-4 py-2 text-sm text-gray-900">{{ roomType.typeName }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ formatPrice(roomType.defaultPrice) }}</td>
-            <td class="px-4 py-2 text-sm text-gray-700">{{ roomType.description }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700" >{{ roomType.description }}</td>
             <td class="px-4 py-2 text-sm text-right">
-              <button @click="openEdit(roomType)" class="text-blue-600 hover:text-blue-900 mr-3">
-                <i class="fa-solid fa-pen-to-square"></i>
-              </button>
-              <button class="text-red-600 hover:text-red-900">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </td>
+                <button @click="openEdit(roomType)" class="mr-3">
+                  <i class="fa-solid fa-pen-to-square text-gray-400 hover:text-blue-600"></i>
+                </button>
+                <button>
+                  <i class="fa-solid fa-trash text-gray-400 hover:text-red-600"></i>
+                </button>
+              </td>
           </tr>
         </tbody>
       </table>

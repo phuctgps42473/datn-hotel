@@ -138,7 +138,7 @@ const route = useRoute();
 }
 
 .nav-links {
-  margin-top: 16px;
+  margin-top: 5px;
   padding: 10px;
   display: flex;
   flex-direction: column;

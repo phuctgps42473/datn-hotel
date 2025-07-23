@@ -94,18 +94,39 @@
                   {{ room.status }}
                 </span>
               </td>
-              <td class="px-6 py-4 text-right text-sm font-medium">
-                <a href="#" @click.prevent="openEditModal(room)" class="text-blue-600 hover:text-blue-900 mr-3">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </a>
-                <a href="#" class="text-red-600 hover:text-red-900">
-                  <i class="fa-solid fa-trash"></i>
-                </a>
-              </td>
+                      <td class="px-6 py-4 text-left text-sm font-medium">
+              <a href="#" @click.prevent="openEditModal(room)" class="text-gray-400 hover:text-gray-600 mr-3">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-trash"></i>
+              </a>
+            </td>
             </tr>
           </tbody>
         </table>
       </div>
+       <div class="mt-6 flex items-center justify-between text-sm text-gray-600">
+          <div class="flex items-center">
+            <span>Hiển thị mỗi trang</span>
+            <select class="ml-2 p-2 border border-gray-300 rounded-md bg-white text-gray-700">
+              <option>6</option>
+              <option>10</option>
+              <option>20</option>
+            </select>
+          </div>
+          <div>
+            <span>1-4 của 10</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button class="p-2 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <button class="p-2 rounded-md hover:bg-gray-200">
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
     </div>
   </div>
 </template>
@@ -113,49 +134,78 @@
 <script setup>
 import { ref } from 'vue';
 
-const rooms = ref([
-  {
-    id: 1,
-    name: 'Phòng khách vua',
-    number: '001',
-    type: 'Deluxe',
-    price: '1.200.000đ',
-    capacity: 2,
-    description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-    status: 'Đang có sẵn',
-  },
-  {
-    id: 2,
-    name: 'Phòng khách vua',
-    number: '002',
-    type: 'Deluxe',
-    price: '1.200.000đ',
-    capacity: 2,
-    description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-    status: 'Hết phòng',
-  },
-  {
-    id: 3,
-    name: 'Phòng khách vua',
-    number: '002',
-    type: 'Deluxe',
-    price: '1.200.000đ',
-    capacity: 2,
-    description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-    status: 'Hết phòng',
-  },
-  {
-    id: 4,
-    name: 'Phòng khách vua',
-    number: '002',
-    type: 'Deluxe',
-    price: '1.200.000đ',
-    capacity: 2,
-    description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-    status: 'Đã đặt trước',
-  },
-]);
-
+ const rooms = ref([
+    {
+      id: 1,
+      name: 'Phòng khách vua',
+      number: '001',
+      type: 'Deluxe',
+      price: '1.200.000đ',
+      capacity: 2,
+      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
+      status: 'Đang có sẵn',
+    },
+    {
+      id: 2,
+      name: 'Phòng khách vua',
+      number: '002',
+      type: 'Deluxe',
+      price: '1.200.000đ',
+      capacity: 2,
+      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
+      status: 'Hết phòng',
+    },
+    {
+      id: 3,
+      name: 'Phòng khách vua',
+      number: '003',
+      type: 'Deluxe',
+      price: '1.200.000đ',
+      capacity: 2,
+      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
+      status: 'Đã đặt trước',
+    },
+    {
+      id: 4,
+      name: 'Phòng khách vua',
+      number: '004',
+      type: 'Deluxe',
+      price: '1.200.000đ',
+      capacity: 2,
+      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
+      status: 'Hết phòng',
+    },
+    {
+      id: 5,
+      name: 'Phòng khách vua',
+      number: '005',
+      type: 'Deluxe',
+      price: '1.200.000đ',
+      capacity: 2,
+      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
+      status: 'Đang có sẵn',
+    },
+    {
+      id: 6,
+      name: 'Phòng khách vua',
+      number: '006',
+      type: 'Deluxe',
+      price: '1.200.000đ',
+      capacity: 2,
+      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
+      status: 'Đang có sẵn',
+    },
+    {
+      id: 7,
+      name: 'Phòng khách vua',
+      number: '007',
+      type: 'Deluxe',
+      price: '1.200.000đ',
+      capacity: 2,
+      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
+      status: 'Đang có sẵn',
+    },
+  ]);
 function getStatusClass(status) {
   switch (status) {
     case 'Đang có sẵn':
