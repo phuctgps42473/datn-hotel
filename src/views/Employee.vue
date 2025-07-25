@@ -182,6 +182,10 @@ function resetForm() {
 function saveChanges() {
   if (!validateForm()) return;
 
+  // ✅ Xác nhận người dùng
+  const confirmed = window.confirm("Bạn có chắc chắn muốn lưu thông tin này?");
+  if (!confirmed) return;
+
   if (isEditMode.value) {
     const index = users.value.findIndex(u => u.id === editedUser.value.id);
     if (index !== -1) {
@@ -192,6 +196,7 @@ function saveChanges() {
   }
   showPopup.value = false;
 }
+
 
 // Validate email và số điện thoại
 function validateForm() {

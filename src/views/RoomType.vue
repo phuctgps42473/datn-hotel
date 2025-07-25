@@ -135,6 +135,10 @@ function saveEdit() {
     return;
   }
 
+  // ✅ Thêm bước xác nhận
+  const confirmed = window.confirm('Bạn có chắc chắn muốn lưu thông tin loại phòng này?');
+  if (!confirmed) return;
+
   const index = roomTypes.value.findIndex(r => r.id === editedType.value.id);
   if (index !== -1) {
     roomTypes.value[index] = { ...editedType.value };
@@ -144,6 +148,8 @@ function saveEdit() {
 
   showPopup.value = false;
 }
+
+ 
 
 function formatPrice(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);

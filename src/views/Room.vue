@@ -271,6 +271,9 @@ function updateRoom() {
     return;
   }
 
+  const confirmSave = window.confirm('Bạn có chắc chắn muốn lưu thông tin phòng này?');
+  if (!confirmSave) return;
+
   if (isEditMode.value) {
     const index = rooms.value.findIndex(r => r.id === editedRoom.value.id);
     if (index !== -1) {
@@ -281,6 +284,7 @@ function updateRoom() {
   }
   isEditModalOpen.value = false;
 }
+
 </script>
 
 <style scoped>
