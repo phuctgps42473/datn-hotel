@@ -15,7 +15,8 @@ import Support from '@/views/Support.vue'
 import Settings from '@/views/Settings.vue'
 import Profile from '@/views/Profile.vue'
 import Notifications from '@/views/Notifications.vue'
-import Roomlist from '@/views/Roomlist.vue'
+import Room from '@/views/Room.vue'
+
 
 const routes = [
   {
@@ -34,7 +35,7 @@ const routes = [
       { path: 'customers', component: () => import('@/views/CustomerDetail.vue') },
       { path: 'invoices', component: () => import('@/views/Invoices.vue') },
       { path: 'invoices/:id', component: () => import('@/views/InvoiceDetail.vue') },
-      { path: 'rooms', component: () => import('@/views/Roomlist.vue') },
+      { path: 'rooms', component: () => import('@/views/Room.vue') },
       { path: 'refunds', component: () => import('@/views/Refunds.vue') },
       { path: 'support', component: () => import('@/views/Support.vue') },
       { path: 'settings', component: () => import('@/views/Settings.vue') },

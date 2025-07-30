@@ -145,10 +145,9 @@ function updateAvatar(event) {
 }
 
 function logout() {
-  const confirmLogout = confirm('Bạn có chắc chắn muốn đăng xuất?')
-  if (confirmLogout) {
+  if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
     alert('Bạn đã đăng xuất!')
-    router.push('/admin-login') // hoặc '/login' tùy app
+    router.push('/admin-login')
   }
 }
 </script>
@@ -190,31 +189,6 @@ function logout() {
   background-color: #fff;
 }
 
-.bg-white.p-10.rounded-2xl.shadow-lg.border {
-  padding: 2.5rem !important;
-  border-radius: 1.5rem !important;
-  box-shadow: 0 10px 20px rgba(25, 157, 178, 0.1) !important;
-  border-color: #cbd5e1 !important;
-}
-
-.flex.flex-col.sm\:flex-row.items-center.gap-6 {
-  gap: 1.5rem;
-}
-
-/* Nút thay đổi ảnh đại diện cách avatar */
-.flex.flex-col.sm\:flex-row.items-center.gap-6 > div label {
-  margin-left: 0;
-  display: inline-block;
-  margin-top: 6px;
-}
-
-@media (min-width: 640px) {
-  .flex.flex-col.sm\:flex-row.items-center.gap-6 > div label {
-    margin-left: 1.2rem;
-    margin-top: 0;
-  }
-}
-
 button.button-save {
   padding: 14px 28px;
   border-radius: 14px;
@@ -251,6 +225,30 @@ button.button-logout:hover {
 
 .flex.justify-end.mt-6 {
   margin-top: 1.5rem;
+}
+
+.bg-white.p-10.rounded-2xl.shadow-lg.border {
+  padding: 2.5rem !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 10px 20px rgba(25, 157, 178, 0.1) !important;
+  border-color: #cbd5e1 !important;
+}
+
+.flex.flex-col.sm\:flex-row.items-center.gap-6 {
+  gap: 1.5rem;
+}
+
+.flex.flex-col.sm\:flex-row.items-center.gap-6 > div label {
+  margin-left: 0;
+  display: inline-block;
+  margin-top: 6px;
+}
+
+@media (min-width: 640px) {
+  .flex.flex-col.sm\:flex-row.items-center.gap-6 > div label {
+    margin-left: 1.2rem;
+    margin-top: 0;
+  }
 }
 
 @media (max-width: 640px) {

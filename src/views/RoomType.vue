@@ -13,12 +13,13 @@
       <table class="w-full table-auto divide-y divide-gray-400">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tên loại</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Giá mặc định</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Mô tả</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hành động</th>
-          </tr>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tên loại</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Giá mặc định</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Mô tả</th>
+          <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Hành động</th>
+        </tr>
+
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
           <tr v-for="roomType in roomTypes" :key="roomType.id">

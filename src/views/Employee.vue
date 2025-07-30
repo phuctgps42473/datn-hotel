@@ -41,12 +41,12 @@
               </span>
             </td>
             <td class="px-4 py-2 text-sm text-right">
-              <button @click="openEditPopup(user)" class="text-blue-600 hover:text-blue-900 mr-3">
-                <i class="fa-solid fa-pen-to-square"></i>
-              </button>
-              <button class="text-red-600 hover:text-red-900">
-                <i class="fa-solid fa-trash"></i>
-              </button>
+                <button @click="openEditPopup(user)" class="text-gray-400 mr-5 hover:text-blue-500 mr-3">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="text-gray-400 mr-1 hover:text-red-500">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
             </td>
           </tr>
         </tbody>
@@ -182,6 +182,10 @@ function resetForm() {
 function saveChanges() {
   if (!validateForm()) return;
 
+  // ✅ Xác nhận người dùng
+  const confirmed = window.confirm("Bạn có chắc chắn muốn lưu thông tin này?");
+  if (!confirmed) return;
+
   if (isEditMode.value) {
     const index = users.value.findIndex(u => u.id === editedUser.value.id);
     if (index !== -1) {
@@ -192,6 +196,7 @@ function saveChanges() {
   }
   showPopup.value = false;
 }
+
 
 // Validate email và số điện thoại
 function validateForm() {
