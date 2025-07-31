@@ -1,54 +1,37 @@
 <template>
-    <div class="p-2 bg-gray-100 min-h-screen font-inter">
-      <div class="max-w-4xl mx-auto p-10">
-        <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center">Thông tin tài khoản</h3>
+  <div class="p-2 bg-gray-100 min-h-screen font-inter">
+    <div class="max-w-4xl mx-auto p-10">
+      <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center">Thông tin tài khoản</h3>
 
-        <div
-          class="bg-white p-10 rounded-2xl shadow-lg border border-gray-300 space-y-12"
-        >
-          <!-- Ảnh đại diện -->
-          <div class="flex flex-col sm:flex-row items-center gap-6">
-            <img
-              :src="user.avatar"
-              alt="Avatar"
-              class="w-24 h-24 rounded-full border-4 border-[#199DB2] object-cover shadow-md"
-            />
-            <div class="text-center sm:text-left">
-              <p class="text-2xl font-semibold text-[#199DB2] mb-1">{{ userInfo.fullname }}</p>
-              <p class="text-gray-500 mb-2">{{ userInfo.role }}</p>
-              <!-- <label
+      <div class="bg-white p-10 rounded-2xl shadow-lg border border-gray-300 space-y-12">
+        <!-- Ảnh đại diện -->
+        <div class="flex flex-col sm:flex-row items-center gap-6">
+          <img :src="user.avatar" alt="Avatar"
+            class="w-24 h-24 rounded-full border-4 border-[#199DB2] object-cover shadow-md" />
+          <div class="text-center sm:text-left">
+            <p class="text-2xl font-semibold text-[#199DB2] mb-1">{{ userInfo.fullname }}</p>
+            <p class="text-gray-500 mb-2">{{ userInfo.role }}</p>
+            <!-- <label
                 class="block text-sm text-[#199DB2] cursor-pointer hover:underline select-none"
               >
                 <input type="file" hidden @change="updateAvatar" />
                 Thay đổi ảnh đại diện
               </label> -->
-            </div>
           </div>
         </div>
+      </div>
 
-        <!-- Thông tin cá nhân -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="label" for="name">Họ và tên</label>
-            <input
-              id="name"
-              v-model="userInfo.fullname"
-              type="text"
-              class="input-field"
-              placeholder="Nhập họ và tên"
-            />
-          </div>
-          <div>
-            <label class="label" for="email">Email</label>
-            <input
-              id="email"
-              v-model="userInfo.email"
-              type="email"
-              class="input-field"
-              placeholder="Nhập email"
-            />
-          </div>
-          <!-- <div>
+      <!-- Thông tin cá nhân -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="label" for="name">Họ và tên</label>
+          <input id="name" v-model="userInfo.fullname" type="text" class="input-field" placeholder="Nhập họ và tên" />
+        </div>
+        <div>
+          <label class="label" for="email">Email</label>
+          <input id="email" v-model="userInfo.email" type="email" class="input-field" placeholder="Nhập email" />
+        </div>
+        <!-- <div>
             <label class="label" for="phone">Số điện thoại</label>
             <input
               id="phone"
@@ -68,10 +51,10 @@
               placeholder="Mô tả về bạn"
             />
           </div> -->
-        </div>
+      </div>
 
-        <!-- Đổi mật khẩu -->
-        <!-- <div>
+      <!-- Đổi mật khẩu -->
+      <!-- <div>
           <h4 class="text-xl font-semibold text-[#199DB2] mb-6">🔐 Đổi mật khẩu</h4>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -97,17 +80,17 @@
           </div>
         </div> -->
 
-        <!-- Nút lưu + đăng xuất -->
-        <div class="flex justify-end mt-6 gap-4">
-          <button @click="logout" class="button-logout">
-            🚪 Đăng xuất
-          </button>
-          <!-- <button @click="saveProfile" class="button-save">
+      <!-- Nút lưu + đăng xuất -->
+      <div class="flex justify-end mt-6 gap-4">
+        <button @click="logout" class="button-logout">
+          🚪 Đăng xuất
+        </button>
+        <!-- <button @click="saveProfile" class="button-save">
             💾 Lưu thay đổi
           </button> -->
-        </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -146,8 +129,30 @@ function updateAvatar(event) {
 
 function logout() {
   if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-    alert('Bạn đã đăng xuất!')
-    router.push('/admin-login')
+    const accessToken = localStorage.getItem('accessToken');
+
+    // if (!accessToken) {
+    //   if (to.path !== '/admin-login') {
+    //     return next('/admin-login');
+    //   } else {
+    //     return next(); // stay on login page
+    //   }
+    // }
+
+    try {
+      fetch("http://localhost:8080/api/logout", {
+        headers: {
+          "Authorization": "Bearer " + accessToken
+        }
+      }).then(res => res.json()).then(console.log);
+      localStorage.clear('accessToken');
+      router.push('/admin-login')
+    } catch (e) {
+      console.error(e);
+      localStorage.clear('accessToken');
+      router.push('/admin-login')
+    }
+
   }
 }
 </script>
@@ -238,14 +243,14 @@ button.button-logout:hover {
   gap: 1.5rem;
 }
 
-.flex.flex-col.sm\:flex-row.items-center.gap-6 > div label {
+.flex.flex-col.sm\:flex-row.items-center.gap-6>div label {
   margin-left: 0;
   display: inline-block;
   margin-top: 6px;
 }
 
 @media (min-width: 640px) {
-  .flex.flex-col.sm\:flex-row.items-center.gap-6 > div label {
+  .flex.flex-col.sm\:flex-row.items-center.gap-6>div label {
     margin-left: 1.2rem;
     margin-top: 0;
   }

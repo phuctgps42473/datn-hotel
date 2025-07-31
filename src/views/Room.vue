@@ -1,13 +1,10 @@
 <template>
-  <div class="p-6 bg-gray-100 min-h-screen font-inter">     
+  <div class="p-6 bg-gray-100 min-h-screen font-inter">
     <h3 class="text-xl font-semibold mb-4">Danh sách phòng</h3>
 
     <!-- Nút Thêm Mới -->
     <div class="mb-4 text-right">
-      <button
-        @click="openAddModal"
-        class="bg-[#2292A7] text-white px-4 py-2 rounded hover:bg-[#1b7e91]"
-      >
+      <button @click="openAddModal" class="bg-[#2292A7] text-white px-4 py-2 rounded hover:bg-[#1b7e91]">
         <i class="fa-solid fa-plus mr-1"></i> Thêm mới
       </button>
     </div>
@@ -23,24 +20,25 @@
           <form @submit.prevent="updateRoom">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium">Tên phòng</label>
-                <input v-model="editedRoom.name" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                <label class="block text-sm font-medium">Số phòng</label>
+                <input v-model="editedRoom.roomNumber" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
               </div>
               <div>
-                <label class="block text-sm font-medium">Số phòng</label>
-                <input v-model="editedRoom.number" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                <label class="block text-sm font-medium">Tiện nghi</label>
+                <input v-model="editedRoom.amenities" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
               </div>
               <div>
                 <label class="block text-sm font-medium">Loại phòng</label>
-                <input v-model="editedRoom.type" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                <input v-model="editedRoom.roomTypeName" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
               </div>
               <div>
                 <label class="block text-sm font-medium">Giá/đêm</label>
-                <input v-model="editedRoom.price" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                <input v-model="editedRoom.pricePerNight" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
               </div>
               <div>
                 <label class="block text-sm font-medium">Sức chứa</label>
-                <input v-model="editedRoom.capacity" type="number" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                <input v-model="editedRoom.capacity" type="number"
+                  class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
               </div>
               <div>
                 <label class="block text-sm font-medium">Trạng thái</label>
@@ -52,7 +50,8 @@
               </div>
               <div class="col-span-2">
                 <label class="block text-sm font-medium">Mô tả</label>
-                <textarea v-model="editedRoom.description" rows="2" class="mt-1 block w-full border border-gray-300 rounded-md p-2"></textarea>
+                <textarea v-model="editedRoom.description" rows="2"
+                  class="mt-1 block w-full border border-gray-300 rounded-md p-2"></textarea>
               </div>
             </div>
             <div class="mt-6 text-right space-x-3">
@@ -71,8 +70,8 @@
         <table class="w-full table-auto divide-y divide-gray-400">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên phòng</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Số phòng</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tiện nghi</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Loại phòng</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Giá/đêm</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sức chứa</th>
@@ -83,10 +82,10 @@
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <tr v-for="room in rooms" :key="room.id">
-              <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ room.name }}</td>
-              <td class="px-6 py-4 text-sm text-gray-500">{{ room.number }}</td>
-              <td class="px-6 py-4 text-sm text-gray-500">{{ room.type }}</td>
-              <td class="px-6 py-4 text-sm text-gray-500">{{ room.price }}</td>
+              <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ room.roomNumber }}</td>
+              <td class="px-6 py-4 text-sm text-gray-500">{{ room.amenities }}</td>
+              <td class="px-6 py-4 text-sm text-gray-500">{{ room.roomTypeName }}</td>
+              <td class="px-6 py-4 text-sm text-gray-500">{{ room.pricePerNight }}</td>
               <td class="px-6 py-4 text-sm text-gray-500">{{ room.capacity }}</td>
               <td class="px-6 py-4 text-sm text-gray-500">{{ room.description }}</td>
               <td class="px-6 py-4 text-sm">
@@ -94,118 +93,59 @@
                   {{ room.status }}
                 </span>
               </td>
-                      <td class="px-6 py-4 text-left text-sm font-medium">
-              <a href="#" @click.prevent="openEditModal(room)" class="text-gray-400 hover:text-gray-600 mr-3">
-                <i class="fa-solid fa-pen-to-square"></i>
-              </a>
-              <a href="#" class="text-gray-400 hover:text-gray-600">
-                <i class="fa-solid fa-trash"></i>
-              </a>
-            </td>
+              <td class="px-6 py-4 text-left text-sm font-medium">
+                <a href="#" @click.prevent="openEditModal(room)" class="text-gray-400 hover:text-gray-600 mr-3">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-gray-600">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-       <div class="mt-6 flex items-center justify-between text-sm text-gray-600">
-          <div class="flex items-center">
-            <span>Hiển thị mỗi trang</span>
-            <select class="ml-2 p-2 border border-gray-300 rounded-md bg-white text-gray-700">
-              <option>6</option>
-              <option>10</option>
-              <option>20</option>
-            </select>
-          </div>
-          <div>
-            <span>1-4 của 10</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <button class="p-2 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-              <i class="fa-solid fa-arrow-left"></i>
-            </button>
-            <button class="p-2 rounded-md hover:bg-gray-200">
-              <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </div>
+      <div class="mt-6 flex items-center justify-between text-sm text-gray-600">
+        <div class="flex items-center">
+          <span>Hiển thị mỗi trang</span>
+          <select class="ml-2 p-2 border border-gray-300 rounded-md bg-white text-gray-700">
+            <option>6</option>
+            <option>10</option>
+            <option>20</option>
+          </select>
         </div>
+        <div>
+          <span>1-4 của 10</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button class="p-2 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <button class="p-2 rounded-md hover:bg-gray-200">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
- const rooms = ref([
-    {
-      id: 1,
-      name: 'Phòng khách vua',
-      number: '001',
-      type: 'Deluxe',
-      price: '1.200.000đ',
-      capacity: 2,
-      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-      status: 'Đang có sẵn',
-    },
-    {
-      id: 2,
-      name: 'Phòng khách vua',
-      number: '002',
-      type: 'Deluxe',
-      price: '1.200.000đ',
-      capacity: 2,
-      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-      status: 'Hết phòng',
-    },
-    {
-      id: 3,
-      name: 'Phòng khách vua',
-      number: '003',
-      type: 'Deluxe',
-      price: '1.200.000đ',
-      capacity: 2,
-      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-      status: 'Đã đặt trước',
-    },
-    {
-      id: 4,
-      name: 'Phòng khách vua',
-      number: '004',
-      type: 'Deluxe',
-      price: '1.200.000đ',
-      capacity: 2,
-      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-      status: 'Hết phòng',
-    },
-    {
-      id: 5,
-      name: 'Phòng khách vua',
-      number: '005',
-      type: 'Deluxe',
-      price: '1.200.000đ',
-      capacity: 2,
-      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-      status: 'Đang có sẵn',
-    },
-    {
-      id: 6,
-      name: 'Phòng khách vua',
-      number: '006',
-      type: 'Deluxe',
-      price: '1.200.000đ',
-      capacity: 2,
-      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-      status: 'Đang có sẵn',
-    },
-    {
-      id: 7,
-      name: 'Phòng khách vua',
-      number: '007',
-      type: 'Deluxe',
-      price: '1.200.000đ',
-      capacity: 2,
-      description: 'Phòng đơn tiêu chuẩn với sức chứa 2 người, trang bị giường đôi, máy lạnh và phòng tắm riêng.',
-      status: 'Đang có sẵn',
-    },
-  ]);
+const rooms = ref([]);
+
+onMounted(async () => {
+  try {
+    const res = await fetch("http://localhost:8080/api/admin/room")
+    if (!res.ok) throw new Error('Network error')
+    let data = await res.json()
+    rooms.value = data;
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 function getStatusClass(status) {
   switch (status) {
     case 'Đang có sẵn':
@@ -299,7 +239,8 @@ table {
   width: 100%;
 }
 
-th, td {
+th,
+td {
   padding: 16px 16px;
   word-wrap: break-word;
   white-space: normal;

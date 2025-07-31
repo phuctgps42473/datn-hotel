@@ -59,28 +59,30 @@ router.beforeEach((to, from, next) => {
     if (to.path !== '/admin-login') {
       return next('/admin-login');
     } else {
-      return next(); // stay on login page
+      return next();
     }
+  } else {
+      return next();
+
   }
 
-  fetch("http://localhost:8080/api/public/health-check-token", {
-    headers: {
-      "Authorization": "Bearer " + accessToken
-    }
-  }).then(res => res.json())
-    .then(body => {
-      if (body.code === 200) {
-        if (to.path === '/admin-login') {
-          next('/')
-        } else {
-          next()
-        }
-      } else {
-        localStorage.removeItem("accessToken");
-        next('/admin-login')
-      }
-    })
-
+  // fetch("http://localhost:8080/api/public/health-check-token", {
+  //   headers: {
+  //     "Authorization": "Bearer " + accessToken
+  //   }
+  // }).then(res => res.json())
+  //   .then(body => {
+  //     if (body.code === 200) {
+  //       if (to.path === '/admin-login') {
+  //         next('/')
+  //       } else {
+  //         next()
+  //       }
+  //     } else {
+  //       localStorage.removeItem("accessToken");
+  //       next('/admin-login')
+  //     }
+  //   });
 })
 
 
