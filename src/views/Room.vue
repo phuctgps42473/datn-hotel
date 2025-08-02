@@ -102,9 +102,9 @@
                 <a href="#" @click.prevent="openEditModal(room)" class="text-gray-400 hover:text-gray-600 mr-3">
                   <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <a href="#" class="text-gray-400 hover:text-gray-600">
+                <!-- <a href="#" class="text-gray-400 hover:text-gray-600">
                   <i class="fa-solid fa-trash"></i>
-                </a>
+                </a> -->
               </td>
             </tr>
           </tbody>
@@ -243,8 +243,13 @@ async function updateRoom() {
     let res;
     if (editedRoom.value.id === 0) {
       res = await fetcher("http://localhost:8080/api/admin/room", "POST", JSON.stringify(body));
+      const index = rooms.value.findIndex(r => r.id === editedRoom.value.id);
+      if (index !== -1) {
+        rooms.value[index] = { ...editedRoom.value };
+      }
     } else {
       res = await fetcher(`http://localhost:8080/api/admin/room/${editedRoom.value.id}`, "PUT", JSON.stringify(body));
+      rooms.value.push({ ...editedRoom.value });
     }
     if (!res.ok) throw new Error('Network error')
     let data = await res.json()
@@ -253,14 +258,6 @@ async function updateRoom() {
     console.error(err);
   }
 
-  if (isEditMode.value) {
-    const index = rooms.value.findIndex(r => r.id === editedRoom.value.id);
-    if (index !== -1) {
-      rooms.value[index] = { ...editedRoom.value };
-    }
-  } else {
-    rooms.value.push({ ...editedRoom.value });
-  }
   isEditModalOpen.value = false;
 }
 
