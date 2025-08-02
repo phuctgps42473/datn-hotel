@@ -21,7 +21,8 @@
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-medium">Số phòng</label>
-                <input v-model="editedRoom.roomNumber" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                <input v-model="editedRoom.roomNumber"
+                  class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
               </div>
               <div>
                 <label class="block text-sm font-medium">Tiện nghi</label>
@@ -29,11 +30,15 @@
               </div>
               <div>
                 <label class="block text-sm font-medium">Loại phòng</label>
-                <input v-model="editedRoom.roomTypeName" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                <select v-model="editedRoom.roomTypeName"
+                  class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                  <option v-for="t in roomtypes" :key="t.id">{{ t.typeName }}</option>
+                </select>
               </div>
               <div>
                 <label class="block text-sm font-medium">Giá/đêm</label>
-                <input v-model="editedRoom.pricePerNight" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                <input v-model="editedRoom.pricePerNight"
+                  class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
               </div>
               <div>
                 <label class="block text-sm font-medium">Sức chứa</label>
@@ -43,9 +48,9 @@
               <div>
                 <label class="block text-sm font-medium">Trạng thái</label>
                 <select v-model="editedRoom.status" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                  <option>Đang có sẵn</option>
-                  <option>Hết phòng</option>
-                  <option>Đã đặt trước</option>
+                  <option>Đang hoạt động</option>
+                  <option>Đang bảo trì</option>
+                  <option>Đã xoá</option>
                 </select>
               </div>
               <div class="col-span-2">
@@ -132,8 +137,10 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import { fetcher } from "@/utils/fetcher";
 
 const rooms = ref([]);
+const roomtypes = ref([]);
 
 onMounted(async () => {
   try {
@@ -141,6 +148,17 @@ onMounted(async () => {
     if (!res.ok) throw new Error('Network error')
     let data = await res.json()
     rooms.value = data;
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+onMounted(async () => {
+  try {
+    const res = await fetch("http://localhost:8080/api/admin/room-type")
+    if (!res.ok) throw new Error('Network error')
+    let data = await res.json()
+    roomtypes.value = data;
   } catch (err) {
     console.error(err);
   }
@@ -172,14 +190,15 @@ function openEditModal(room) {
 function openAddModal() {
   isEditMode.value = false;
   editedRoom.value = {
-    id: Date.now(),
-    name: '',
-    number: '',
-    type: '',
-    price: '',
-    capacity: 1,
-    description: '',
-    status: 'Đang có sẵn',
+    id: 0,
+    amenities: "",
+    capacity: 2,
+    description: "",
+    pricePerNight: 0,
+    roomNumber: "",
+    roomTypeID: 0,
+    roomTypeName: "",
+    status: "Đang hoạt động",
   };
   isEditModalOpen.value = true;
 }
@@ -195,17 +214,16 @@ function resetForm() {
 function validateRoom() {
   const r = editedRoom.value;
   return (
-    r.name.trim() !== '' &&
-    r.number.trim() !== '' &&
-    r.type.trim() !== '' &&
-    r.price.trim() !== '' &&
-    r.capacity &&
-    r.status.trim() !== '' &&
-    r.description.trim() !== ''
+    r.amenities.trim() !== "",
+    r.description.trim() !== "",
+    r.pricePerNight >= 0,
+    r.roomNumber.trim() !== "",
+    r.roomTypeID !== 0,
+    r.roomTypeName.trim() !== ""
   );
 }
 
-function updateRoom() {
+async function updateRoom() {
   if (!validateRoom()) {
     alert('Vui lòng nhập đầy đủ tất cả các trường.');
     return;
@@ -213,6 +231,27 @@ function updateRoom() {
 
   const confirmSave = window.confirm('Bạn có chắc chắn muốn lưu thông tin phòng này?');
   if (!confirmSave) return;
+
+  let r = roomtypes.value.find(r => r.typeName === editedRoom.value.roomTypeName);
+  editedRoom.value.roomTypeID = r.id;
+
+  let body = { ...editedRoom.value };
+  delete body.id;
+  delete body.roomTypeName;
+
+  try {
+    let res;
+    if (editedRoom.value.id === 0) {
+      res = await fetcher("http://localhost:8080/api/admin/room", "POST", JSON.stringify(body));
+    } else {
+      res = await fetcher(`http://localhost:8080/api/admin/room/${editedRoom.value.id}`, "PUT", JSON.stringify(body));
+    }
+    if (!res.ok) throw new Error('Network error')
+    let data = await res.json()
+    rooms.value = data;
+  } catch (err) {
+    console.error(err);
+  }
 
   if (isEditMode.value) {
     const index = rooms.value.findIndex(r => r.id === editedRoom.value.id);

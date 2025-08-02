@@ -3,7 +3,6 @@
     <!-- Header + Nút thêm -->
     <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-10 gap-3 mb-10">
       <h3 class="text-xl md:text-2xl font-semibold text-gray-800">Chi tiết khách hàng</h3>
-      <button class="add-button ">+ Thêm mới khách hàng</button>
     </div>
 
     <!-- Danh sách khách hàng -->
