@@ -48,9 +48,9 @@
               <div>
                 <label class="block text-sm font-medium">Trạng thái</label>
                 <select v-model="editedRoom.status" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                  <option>Đang hoạt động</option>
-                  <option>Đang bảo trì</option>
-                  <option>Đã xoá</option>
+                  <option>ACTIVE</option>
+                  <option>MAINTAINING</option>
+                  <option>OUT OF SERVICE</option>
                 </select>
               </div>
               <div class="col-span-2">
@@ -198,7 +198,7 @@ function openAddModal() {
     roomNumber: "",
     roomTypeID: 0,
     roomTypeName: "",
-    status: "Đang hoạt động",
+    status: "ACTIVE",
   };
   isEditModalOpen.value = true;
 }

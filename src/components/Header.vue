@@ -73,7 +73,7 @@ const userInfo = userStore.userInfo;
 
 .main-header {
   background-color: #f3f4f6;
-  padding: 24px;
+  padding: 24px 24px 0px 24px;
   font-family: 'Inter', sans-serif;
 }
 

@@ -1,98 +1,64 @@
 <template>
   <div class="sidebar">
-  <div class="sidebar-header">
-  <RouterLink to="/" class="block pl-2"> <h2>ELARIS HOTEL</h2>
-  </RouterLink>
-</div>
+    <div class="sidebar-header">
+      <RouterLink to="/" class="block pl-2">
+        <h2>ELARIS HOTEL</h2>
+      </RouterLink>
+    </div>
     <nav class="nav-links">
-      <router-link
-        to="/"
-        class="nav-link"
-        :class="{ active: route.path === '/' }"
-      >
+      <router-link to="/" class="nav-link" :class="{ active: route.path === '/' }">
         <span class="icon"><i class="fa-solid fa-house"></i></span>
         <span class="label">Trang chủ</span>
       </router-link>
 
-      <router-link
-  to="/rooms"
-  class="nav-link"
-  :class="{ active: route.path.startsWith('/rooms') }"
->
-  <span class="icon"><i class="fa-solid fa-door-open"></i></span>
-  <span class="label">Danh sách phòng</span>
-</router-link>
+      <router-link to="/rooms" class="nav-link" :class="{ active: route.path.startsWith('/rooms') }">
+        <span class="icon"><i class="fa-solid fa-door-open"></i></span>
+        <span class="label">Danh sách phòng</span>
+      </router-link>
 
-      <router-link
-        to="/employees"
-        class="nav-link"
-        :class="{ active: route.path.startsWith('/employees') }"
-      >
+      <router-link to="/employees" class="nav-link" :class="{ active: route.path.startsWith('/employees') }">
         <span class="icon"><i class="fa-solid fa-user"></i></span>
         <span class="label">Nhân viên</span>
       </router-link>
 
-      <router-link
-        to="/customers"
-        class="nav-link"
-        :class="{ active: route.path.startsWith('/customers') }"
-      >
+      <router-link to="/customers" class="nav-link" :class="{ active: route.path.startsWith('/customers') }">
         <span class="icon"><i class="fa-solid fa-user-tie"></i></span>
         <span class="label">Khách hàng</span>
       </router-link>
 
-      <router-link
-        to="/room-types"
-        class="nav-link"
-        :class="{ active: route.path.startsWith('/room-types') }"
-      >
+      <router-link to="/room-types" class="nav-link" :class="{ active: route.path.startsWith('/room-types') }">
         <span class="icon"><i class="fa-solid fa-bed"></i></span>
         <span class="label">Loại phòng</span>
       </router-link>
 
-      <router-link
-        to="/booking-details"
-        class="nav-link"
-        :class="{ active: route.path.startsWith('/booking-details') }"
-      >
+      <router-link to="/booking-details" class="nav-link"
+        :class="{ active: route.path.startsWith('/booking-details') }">
         <span class="icon"><i class="fa-solid fa-file-lines"></i></span>
-        <span class="label">Chi tiết đặt phòng</span>
+        <span class="label">Đặt phòng</span>
       </router-link>
 
-      <router-link
+      <!-- <router-link
         to="/invoices"
         class="nav-link"
         :class="{ active: route.path.startsWith('/invoices') }"
       >
         <span class="icon"><i class="fa-solid fa-receipt"></i></span>
         <span class="label">Hóa đơn</span>
+      </router-link> -->
+
+      <!-- <router-link to="/refunds" class="nav-link" :class="{ active: route.path.startsWith('/refunds') }">
+        <span class="icon"><i class="fa-solid fa-money-check"></i></span>
+        <span class="label">Hoàn trả</span>
+      </router-link> -->
+
+
+      <router-link to="/support" class="nav-link" :class="{ active: route.path.startsWith('/support') }">
+        <span class="icon"><i class="fa-solid fa-headset"></i></span>
+        <span class="label">Hỗ trợ</span>
       </router-link>
 
-      <router-link
-  to="/refunds"
-  class="nav-link"
-  :class="{ active: route.path.startsWith('/refunds') }"
->
-  <span class="icon"><i class="fa-solid fa-money-check"></i></span>
-  <span class="label">Hoàn trả</span>
-</router-link>
 
-
-<router-link
-  to="/support"
-  class="nav-link"
-  :class="{ active: route.path.startsWith('/support') }"
->
-  <span class="icon"><i class="fa-solid fa-headset"></i></span>
-  <span class="label">Hỗ trợ</span>
-</router-link>
-
-
-      <router-link
-        to="/settings"
-        class="nav-link"
-        :class="{ active: route.path.startsWith('/settings') }"
-      >
+      <router-link to="/settings" class="nav-link" :class="{ active: route.path.startsWith('/settings') }">
         <span class="icon"><i class="fa-solid fa-gear"></i></span>
         <span class="label">Cài đặt</span>
       </router-link>
@@ -113,7 +79,7 @@ const route = useRoute();
   left: 0;
   width: 230px;
   background-color: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   height: 100vh;
   overflow-y: auto;
   scrollbar-width: none;
