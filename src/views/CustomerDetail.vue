@@ -1,51 +1,79 @@
-
 <template>
   <div class="p-6 bg-gray-100 min-h-screen font-inter">
-    <!-- Header + Nút thêm -->
+    <!-- Header -->
     <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-10">
       <h3 class="text-xl md:text-2xl font-semibold text-gray-800">Chi tiết khách hàng</h3>
     </div>
 
     <!-- Danh sách khách hàng -->
-    <div class="flex flex-col gap-y-6 ">
-      <div class="bg-white rounded-lg shadow-md p-6 w-full">
-        <table class="w-full table-auto divide-y divide-gray-400">
-          <thead class="bg-gray-50">
-            <tr>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Họ tên</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Số điện thoại</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tình trạng</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hành động</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="customer in customers" :key="customer.id">
-              <td class="px-4 py-2 text-sm text-gray-900">{{ customer.id }}</td>
-              <td class="px-4 py-2 text-sm text-gray-900">{{ customer.fullName }}</td>
-              <td class="px-4 py-2 text-sm text-gray-700">{{ customer.email }}</td>
-              <td class="px-4 py-2 text-sm text-gray-700">{{ customer.phoneNumber }}</td>
-              <td class="px-4 py-2 text-sm">
-                <span :class="getStatusClass(customer.isActive)">
-                  {{ customer.isActive ? 'Bình thường' : 'Đã chặn' }}
-                </span>
-              </td>
-              <td class="px-4 py-2 text-sm text-right">
-                <button @click="openEditPopup(customer)" class="text-gray-400 hover:text-blue-500 mr-5 mx-auto">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button @click="openBookingPopup(customer.id)" class="text-gray-400 mr-7 hover:text-red-500">
-                  <i class="fa-solid fa-book"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="bg-white rounded-lg shadow-md p-6 w-full">
+      <table class="w-full table-auto divide-y divide-gray-400">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Họ tên</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Số điện thoại</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tình trạng</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hành động</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr v-for="customer in customers" :key="customer.id">
+            <td class="px-4 py-2 text-sm text-gray-900">{{ customer.id }}</td>
+            <td class="px-4 py-2 text-sm text-gray-900">{{ customer.fullName }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ customer.email }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ customer.phoneNumber }}</td>
+            <td class="px-4 py-2 text-sm">
+              <span :class="getStatusClass(customer.isActive)">
+                {{ customer.isActive ? 'Bình thường' : 'Đã chặn' }}
+              </span>
+            </td>
+            <td class="px-4 py-2 text-sm text-right">
+              <button @click="openEditPopup(customer)" class="text-gray-400 hover:text-blue-500 mr-5 mx-auto">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button @click="openBookingPopup(customer.id)" class="text-gray-400 mr-7 hover:text-red-500">
+                <i class="fa-solid fa-book"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ========== PHẦN PHÂN TRANG ĐÃ ĐƯỢC THAY THẾ ========== -->
+      <div v-if="totalElements > 0" class="mt-7 flex items-center justify-between text-sm text-gray-600">
+        <div class="flex items-center">
+          <span>Hiển thị mỗi trang</span>
+          <select v-model="pageSize" class="ml-3 p-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none">
+            <option value="6">6</option>
+            <option value="12">12</option>
+            <option value="18">18</option>
+          </select>
+        </div>
+        <div>
+          <span>
+            Hiển thị
+            <span class="font-semibold">{{ Math.min(currentPage * pageSize + 1, totalElements) }}</span> -
+            <span class="font-semibold">{{ Math.min((currentPage + 1) * pageSize, totalElements) }}</span>
+            của
+            <span class="font-semibold">{{ totalElements }}</span>
+          </span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 0" class="p-3 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <button @click="goToPage(currentPage + 1)" :disabled="currentPage >= totalPages - 1" class="p-3 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
       </div>
+
     </div>
 
-    <!-- Edit Popup -->
+
+    <!-- Edit Popup (Không thay đổi) -->
     <div v-if="showPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="bg-white p-6 rounded-lg w-[400px] shadow-lg">
         <h2 class="text-xl font-bold mb-4 text-[#2292A7]">
@@ -93,7 +121,7 @@
       </div>
     </div>
 
-    <!-- Booking Popup -->
+    <!-- Booking Popup (Không thay đổi) -->
     <div v-if="showBookingPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="bg-white p-6 rounded-lg w-[600px] max-h-[80vh] overflow-y-auto shadow-lg">
         <h2 class="text-xl font-bold mb-4 text-[#2292A7]">
@@ -137,137 +165,10 @@
 import { formatPrice } from '@/utils/currency';
 import { formatDate } from '@/utils/date';
 import { fetcher } from '@/utils/fetcher';
-import { onMounted, ref } from 'vue';
+// ========== THÊM 'watch' ĐỂ THEO DÕI THAY ĐỔI ==========
+import { onMounted, ref, watch } from 'vue';
 
-// Sample booking data
-const bookingData = [
-    {
-        "id": 1,
-        "checkInDate": "2025-07-07T17:00:00.000+00:00",
-        "checkOutDate": "2025-07-08T17:00:00.000+00:00",
-        "bookingDate": "2025-07-05T02:57:56.557+00:00",
-        "numberOfGuests": 1,
-        "totalPrice": 1300000.00,
-        "status": "Checked Out",
-        "specialRequests": null,
-        "bookingDetails": [
-            {
-                "id": {
-                    "bookingID": 1,
-                    "serviceID": 1
-                },
-                "quantity": 1,
-                "dateProvided": "2025-07-05T02:57:56.563+00:00"
-            }
-        ],
-        "payments": [
-            {
-                "id": 1,
-                "bookingID": null,
-                "transactionNo": "15056812",
-                "amount": 1300000.00,
-                "paymentDate": "2025-07-05T02:58:41.497+00:00",
-                "paymentMethod": "VNPay",
-                "status": "SUCCESS",
-                "processedByStaffID": null
-            },
-            {
-                "id": 2,
-                "bookingID": null,
-                "transactionNo": "15056812",
-                "amount": 1300000.00,
-                "paymentDate": "2025-07-05T03:22:10.783+00:00",
-                "paymentMethod": "VNPay",
-                "status": "SUCCESS",
-                "processedByStaffID": null
-            },
-            {
-                "id": 3,
-                "bookingID": null,
-                "transactionNo": "15056812",
-                "amount": 1300000.00,
-                "paymentDate": "2025-07-05T04:12:00.707+00:00",
-                "paymentMethod": "VNPay",
-                "status": "SUCCESS",
-                "processedByStaffID": null
-            },
-            {
-                "id": 4,
-                "bookingID": null,
-                "transactionNo": "15056812",
-                "amount": 1300000.00,
-                "paymentDate": "2025-07-05T04:29:20.303+00:00",
-                "paymentMethod": "VNPay",
-                "status": "SUCCESS",
-                "processedByStaffID": null
-            }
-        ],
-        "reviews": [
-            {
-                "id": 12,
-                "rating": 5,
-                "comment": "",
-                "reviewDate": "2025-07-26T10:23:12.180+00:00"
-            }
-        ]
-    },
-    {
-        "id": 2,
-        "checkInDate": "2025-07-29T17:00:00.000+00:00",
-        "checkOutDate": "2025-07-30T17:00:00.000+00:00",
-        "bookingDate": "2025-07-30T14:34:16.507+00:00",
-        "numberOfGuests": 1,
-        "totalPrice": 1300000.00,
-        "status": "Pending",
-        "specialRequests": null,
-        "bookingDetails": [
-            {
-                "id": {
-                    "bookingID": 2,
-                    "serviceID": 1
-                },
-                "quantity": 1,
-                "dateProvided": "2025-07-30T14:34:16.507+00:00"
-            }
-        ],
-        "payments": [],
-        "reviews": []
-    },
-    {
-        "id": 3,
-        "checkInDate": "2025-08-07T17:00:00.000+00:00",
-        "checkOutDate": "2025-08-08T17:00:00.000+00:00",
-        "bookingDate": "2025-07-30T14:37:34.037+00:00",
-        "numberOfGuests": 1,
-        "totalPrice": 1200000.00,
-        "status": "Pending",
-        "specialRequests": null,
-        "bookingDetails": [],
-        "payments": [
-            {
-                "id": 5,
-                "bookingID": null,
-                "transactionNo": "0",
-                "amount": 1200000.00,
-                "paymentDate": "2025-07-30T14:53:10.250+00:00",
-                "paymentMethod": "VNPay",
-                "status": "SUCCESS",
-                "processedByStaffID": null
-            },
-            {
-                "id": 6,
-                "bookingID": null,
-                "transactionNo": "0",
-                "amount": 1200000.00,
-                "paymentDate": "2025-07-30T14:53:12.140+00:00",
-                "paymentMethod": "VNPay",
-                "status": "SUCCESS",
-                "processedByStaffID": null
-            }
-        ],
-        "reviews": []
-    }
-];
+const bookingData = [];
 
 const customers = ref([]);
 const showPopup = ref(false);
@@ -276,17 +177,41 @@ const editedUser = ref({});
 const errors = ref({});
 const bookings = ref([]);
 
-onMounted(async () => {
+// Pagination State
+const currentPage = ref(0);
+// ========== THAY ĐỔI GIÁ TRỊ MẶC ĐỊNH CHO PHÙ HỢP VỚI DROPDOWN ==========
+const pageSize = ref(6);
+const totalPages = ref(0);
+const totalElements = ref(0);
+
+// Function to fetch customers with pagination
+const fetchCustomers = async (page = 0, size = 6) => {
   try {
-    const res = await fetcher("http://localhost:8080/api/admin/user");
+    const res = await fetcher(`http://localhost:8080/api/admin/user?page=${page}&size=${size}`);
     if (!res.ok) throw new Error('Network error');
     let data = await res.json();
-    console.log(data);
-    customers.value = data;
+    if (data.code === 200) {
+      customers.value = data.data.content;
+      // ========== SỬA LỖI NaN BẰNG CÁCH THÊM GIÁ TRỊ DỰ PHÒNG ==========
+      totalPages.value = data.data.totalPages ?? 1;
+      totalElements.value = data.data.totalElements ?? 0;
+      currentPage.value = data.data.number ?? 0; // Đổi 'pageNo' thành 'number' (chuẩn hơn)
+    }
   } catch (err) {
     console.error(err);
   }
+};
+
+onMounted(() => {
+  fetchCustomers(currentPage.value, pageSize.value);
 });
+
+// ========== THÊM HÀM WATCH ĐỂ TỰ ĐỘNG GỌI API KHI pageSize THAY ĐỔI ==========
+watch(pageSize, (newPageSize) => {
+  // Khi người dùng chọn pageSize mới, luôn quay về trang đầu tiên
+  fetchCustomers(0, newPageSize);
+});
+
 
 // Mở form sửa
 function openEditPopup(user) {
@@ -296,10 +221,20 @@ function openEditPopup(user) {
 }
 
 // Mở danh sách đặt phòng
-function openBookingPopup(customerId) {
-  // Lọc booking theo customerId (giả sử API trả về dữ liệu liên kết)
-  bookings.value = bookingData.filter(booking => booking.id <= 3); // Thay thế bằng API call thực tế nếu có
-  showBookingPopup.value = true;
+async function openBookingPopup(customerId) {
+  // Thay thế bằng API call thực tế
+  try {
+    const res = await fetcher(`http://localhost:8080/api/admin/booking/user/${customerId}`);
+    if (!res.ok) throw new Error('Network error');
+    const data = await res.json();
+    if (data.code === 200) {
+      bookings.value = data.data;
+      showBookingPopup.value = true;
+    }
+  } catch (error) {
+    console.error("Failed to fetch bookings:", error);
+    // Có thể thêm thông báo lỗi cho người dùng ở đây
+  }
 }
 
 async function saveChanges() {
@@ -307,15 +242,15 @@ async function saveChanges() {
   if (!confirmed) return;
 
   try {
-    await fetcher("http://localhost:8080/api/admin/user/" + editedUser.value.id, "PUT", JSON.stringify({ isActive: editedUser.value.isActive }));
-    const index = customers.value.findIndex(u => u.id === editedUser.value.id);
-    if (index !== -1) {
-      customers.value[index] = { ...editedUser.value };
-    }
+    const res = await fetcher("http://localhost:8080/api/admin/user/" + editedUser.value.id, "PUT", JSON.stringify({ isActive: editedUser.value.isActive }));
+    if (!res.ok) throw new Error("Failed to update");
+
+    // Refresh the current page data
+    await fetchCustomers(currentPage.value, pageSize.value);
+    showPopup.value = false;
   } catch (error) {
     console.error(error);
   }
-  showPopup.value = false;
 }
 
 
@@ -328,10 +263,22 @@ function getStatusClass(isActive) {
 
 // Trạng thái đặt phòng
 function getBookingStatusClass(status) {
-  return status === 'Checked Out'
-    ? 'px-2 inline-flex text-xs font-semibold rounded-full bg-blue-100 text-blue-800'
-    : 'px-2 inline-flex text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800';
+  const statusClasses = {
+    'PENDING': 'bg-yellow-100 text-yellow-800',
+    'CONFIRMED': 'bg-blue-100 text-blue-800',
+    'CHECKED_IN': 'bg-green-100 text-green-800',
+    'CHECKED_OUT': 'bg-gray-200 text-gray-800',
+    'CANCELLED': 'bg-red-100 text-red-800'
+  };
+  return `px-2 inline-flex text-xs font-semibold rounded-full ${statusClasses[status] || 'bg-gray-100 text-gray-800'}`;
 }
+
+// Pagination navigation
+const goToPage = (page) => {
+  if (page >= 0 && page < totalPages.value) {
+    fetchCustomers(page, pageSize.value);
+  }
+};
 </script>
 
 <style scoped>
@@ -341,150 +288,10 @@ function getBookingStatusClass(status) {
   font-family: 'Inter', sans-serif;
 }
 
-h3 {
-  margin-bottom: 10px;
-}
-
-button {
-  margin-bottom: 10px;
-}
-
-.bg-card {
-  background-color: #ffffff;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e7eb;
-}
-
-.customer-card {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .customer-card {
-    display: grid;
-    grid-template-columns: 1.3fr 2fr auto;
-    align-items: center;
-    gap: 1.5rem;
-  }
-}
-
-.customer-info {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-width: 0;
-}
-
-.customer-avatar {
-  width: 52px;
-  height: 52px;
-  border-radius: 9999px;
-  object-fit: cover;
-  border: 1.5px solid #cbd5e1;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-  flex-shrink: 0;
-}
-
-.customer-details {
-  overflow: hidden;
-}
-
-.customer-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #006d77;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.customer-email {
-  font-size: 0.75rem;
-  color: #6b7280;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.customer-meta {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.25rem;
-  font-size: 0.85rem;
-  color: #374151;
-  line-height: 1.4;
-}
-
-.customer-meta span {
-  font-weight: 600;
-  color: #007c91;
-}
-
-@media (min-width: 768px) {
-  .customer-meta {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Nút hành động */
-.action-button-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: flex-end;
-}
-
-.action-button,
-.edit-button {
-  width: 180px;
-  text-align: center;
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-  font-size: 0.85rem;
-  border-radius: 0.5rem;
-  white-space: nowrap;
-  transition: background-color 0.2s ease;
-}
-
-/* Nút lịch sử */
-.action-button {
-  background-color: #199db2;
-  color: white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.action-button:hover {
-  background-color: #147e90;
-}
-
-/* Nút chỉnh sửa */
-.edit-button {
-  background-color: #e0f2f1;
-  color: #007c91;
-  border: 1px solid #b2dfdb;
-}
-
-.edit-button:hover {
-  background-color: #b2dfdb;
-}
-
-/* Nút thêm */
-.add-button {
-  background-color: #007c91;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s ease;
-}
-
-.add-button:hover {
-  background-color: #006072;
+th,
+td {
+  padding: 12px;
+  word-wrap: break-word;
+  white-space: normal;
 }
 </style>

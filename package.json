@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cloudinary/url-gen": "^1.21.0",
+    "@cloudinary/vue": "^1.13.3",
     "@tailwindcss/vite": "^4.1.10",
     "chart.js": "^4.5.0",
     "pinia": "^3.0.3",

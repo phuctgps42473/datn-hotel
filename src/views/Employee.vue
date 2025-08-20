@@ -39,16 +39,43 @@
               <button @click="openEditPopup(staff)" class="text-gray-400 hover:text-blue-500 mr-10 mx-auto">
                 <i class="fa-solid fa-pen-to-square"></i>
               </button>
-              <!-- <button class="text-gray-400 mr-1 hover:text-red-500">
-                <i class="fa-solid fa-trash"></i>
-              </button> -->
             </td>
           </tr>
         </tbody>
       </table>
+
+      <!-- ========== PHẦN PHÂN TRANG ĐÃ ĐƯỢC THAY THẾ ========== -->
+      <div v-if="totalElements > 0" class="mt-7 flex items-center justify-between text-sm text-gray-600">
+        <div class="flex items-center">
+          <span>Hiển thị mỗi trang</span>
+          <select v-model="pageSize" class="ml-3 p-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none">
+            <option value="6">6</option>
+            <option value="12">12</option>
+            <option value="18">18</option>
+          </select>
+        </div>
+        <div>
+          <span>
+            Hiển thị
+            <span class="font-semibold">{{ Math.min(currentPage * pageSize + 1, totalElements) }}</span> -
+            <span class="font-semibold">{{ Math.min((currentPage + 1) * pageSize, totalElements) }}</span>
+            của
+            <span class="font-semibold">{{ totalElements }}</span>
+          </span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 0" class="p-3 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <button @click="goToPage(currentPage + 1)" :disabled="currentPage >= totalPages - 1" class="p-3 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Popup Form -->
+    <!-- Popup Form (Không thay đổi) -->
     <div v-if="showPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="bg-white p-6 rounded-lg w-[400px] shadow-lg">
         <h2 class="text-xl font-bold mb-4 text-[#2292A7]">
@@ -108,22 +135,44 @@
 
 <script setup>
 import { fetcher } from '@/utils/fetcher';
-import { onMounted, ref } from 'vue';
+// ========== THÊM 'watch' ĐỂ THEO DÕI THAY ĐỔI ==========
+import { onMounted, ref, watch } from 'vue';
 
 const staffs = ref([]);
+const currentPage = ref(0);
+// ========== THAY ĐỔI GIÁ TRỊ MẶC ĐỊNH CHO PHÙ HỢP VỚI DROPDOWN ==========
+const pageSize = ref(6);
+const totalPages = ref(0);
+const totalElements = ref(0);
 
-onMounted(async () => {
+// Function to fetch staffs with pagination
+const fetchStaffs = async (page = 0, size = 6) => {
   try {
-    const res = await fetcher("http://localhost:8080/api/admin/staff")
-    if (!res.ok) throw new Error('Network error')
-    let data = await res.json()
+    const res = await fetcher(`http://localhost:8080/api/admin/staff?page=${page}&size=${size}`);
+    if (!res.ok) throw new Error('Network error');
+    let data = await res.json();
     if (data.code === 200) {
-      staffs.value = data.data;
+      staffs.value = data.data.content;
+
+      // ========== SỬA LỖI NaN BẰNG CÁCH THÊM GIÁ TRỊ DỰ PHÒNG ==========
+      // Giả sử API trả về 'number' cho trang hiện tại. Nếu không, nó sẽ mặc định là 0.
+      totalPages.value = data.data.totalPages ?? 1;
+      totalElements.value = data.data.totalElements ?? 0;
+      currentPage.value = data.data.pageNo ?? 0; // Đổi 'pageNo' thành 'number' (chuẩn hơn)
     }
   } catch (err) {
     console.error(err);
   }
+};
+
+onMounted(() => {
+  fetchStaffs(currentPage.value, pageSize.value);
 });
+
+watch(pageSize, (newPageSize) => {
+  fetchStaffs(0, newPageSize);
+});
+
 
 const ROLE = { "ADMIN": 1, "STAFF": 2 };
 const showPopup = ref(false);
@@ -178,10 +227,7 @@ async function saveChanges() {
       let res = await fetcher("http://localhost:8080/api/admin/staff/" + editedUser.value.id, "PUT", JSON.stringify(newStaff));
       let data = await res.json()
       if (data.code === 200) {
-        const index = staffs.value.findIndex(u => u.id === editedUser.value.id);
-        if (index !== -1) {
-          staffs.value[index] = { ...editedUser.value };
-        }
+        await fetchStaffs(currentPage.value, pageSize.value)
       }
     } catch (error) {
       console.error(error);
@@ -191,7 +237,8 @@ async function saveChanges() {
       let res = await fetcher("http://localhost:8080/api/admin/staff", "POST", JSON.stringify(newStaff));
       let data = await res.json()
       if (data.code === 201) {
-        staffs.value.push({ ...editedUser.value });
+        // Sau khi thêm mới, nên quay về trang đầu tiên để thấy nhân viên mới
+        await fetchStaffs(0, pageSize.value)
       }
     } catch (error) {
       console.error(error);
@@ -230,6 +277,14 @@ function getStatusClass(isActive) {
     ? 'px-2 inline-flex text-xs font-semibold rounded-full bg-green-100 text-green-800'
     : 'px-2 inline-flex text-xs font-semibold rounded-full bg-gray-200 text-gray-800';
 }
+
+// Pagination navigation
+const goToPage = (page) => {
+  // Logic này không cần thay đổi, nó sẽ hoạt động đúng khi các biến khác đã đúng
+  if (page >= 0 && page < totalPages.value) {
+    fetchStaffs(page, pageSize.value);
+  }
+};
 </script>
 
 
