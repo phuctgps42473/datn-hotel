@@ -10,7 +10,7 @@
         </div>
         <div>
           <p class="text-gray-500 text-sm">Tổng doanh thu hôm nay</p>
-          <p class="text-lg font-bold text-[#2292A7]">120,000,000đ</p>
+          <p class="text-lg font-bold text-[#2292A7]">{{ formatCurrency(apiData.revenueToday) }}</p>
         </div>
       </div>
 
@@ -20,7 +20,7 @@
         </div>
         <div>
           <p class="text-gray-500 text-sm">Tổng đơn đặt phòng</p>
-          <p class="text-lg font-bold text-[#2292A7]">25</p>
+          <p class="text-lg font-bold text-[#2292A7]">{{ apiData.totalBookings }}</p>
         </div>
       </div>
 
@@ -30,7 +30,7 @@
         </div>
         <div>
           <p class="text-gray-500 text-sm">Phòng còn trống</p>
-          <p class="text-lg font-bold text-[#2292A7]">12</p>
+          <p class="text-lg font-bold text-[#2292A7]">{{ apiData.availableRooms }}</p>
         </div>
       </div>
 
@@ -40,7 +40,7 @@
         </div>
         <div>
           <p class="text-gray-500 text-sm">Trạng thái hoạt động</p>
-          <p class="text-lg font-bold text-[#2292A7]">Hoạt động</p>
+          <p class="text-lg font-bold text-[#2292A7]">{{ apiData.systemStatus }}</p>
         </div>
       </div>
     </div>
@@ -65,14 +65,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="booking in recentBookings" :key="booking.id" class="border-b hover:bg-gray-50">
-            <td class="py-3 px-4">{{ booking.customer }}</td>
-            <td class="py-3 px-4">{{ booking.room }}</td>
-            <td class="py-3 px-4">{{ booking.checkin }}</td>
-            <td class="py-3 px-4">{{ booking.checkout }}</td>
+          <tr v-for="(booking, index) in apiData.recentBookings" :key="index" class="border-b hover:bg-gray-50">
+            <td class="py-3 px-4">{{ booking.customerName }}</td>
+            <td class="py-3 px-4">Phòng {{ booking.roomNumber }}</td>
+            <td class="py-3 px-4">{{ formatDate(booking.checkInDate) }}</td>
+            <td class="py-3 px-4">{{ formatDate(booking.checkOutDate) }}</td>
             <td class="py-3 px-4">
               <span :class="statusClass(booking.status)" class="px-2 py-1 rounded-full text-xs font-semibold">
-                {{ booking.status }}
+                {{ translateStatus(booking.status) }}
               </span>
             </td>
           </tr>
@@ -83,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -94,33 +94,38 @@ import {
   CategoryScale,
   LinearScale,
 } from 'chart.js'
+import { fetcher } from '@/utils/fetcher'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-const recentBookings = ref([
-  { id: 1, customer: 'Hoàng Kim Ngân', room: 'Phòng 101', checkin: '20/5/2025', checkout: '22/5/2025', status: 'Đã xác nhận' },
-  { id: 2, customer: 'Nguyễn Văn A', room: 'Phòng 102', checkin: '18/5/2025', checkout: '19/5/2025', status: 'Đang chờ' },
-  { id: 3, customer: 'Trần Thị B', room: 'Phòng 105', checkin: '15/5/2025', checkout: '17/5/2025', status: 'Đã hủy' },
-])
+// --- Mock API data (replace bằng fetch thực tế)
+const apiData = ref({
+  revenueToday: 0,
+  totalBookings: 0,
+  availableRooms: 0,
+  systemStatus: '',
+  revenueChart: [],
+  recentBookings: []
+})
 
-function statusClass(status) {
-  if (status === 'Đã xác nhận') return 'bg-green-100 text-green-800'
-  if (status === 'Đang chờ') return 'bg-yellow-100 text-yellow-800'
-  if (status === 'Đã hủy') return 'bg-red-100 text-red-800'
-  return 'bg-gray-100 text-gray-800'
-}
+onMounted(async () => {
+  let res = await fetcher("http://localhost:8080/api/admin/dashboard");
+  const data = await res.json();
+  console.log(data);
+  apiData.value = data
+});
 
-const chartData = {
-  labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5'],
+const chartData = computed(() => ({
+  labels: apiData.value.revenueChart.map(item => `Tháng ${item.month}`),
   datasets: [
     {
       label: 'Doanh thu (VNĐ)',
       backgroundColor: '#2292A7',
-      data: [10000000, 12000000, 9000000, 15000000, 17000000],
+      data: apiData.value.revenueChart.map(item => item.totalRevenue),
       barThickness: 60,
     },
   ],
-}
+}))
 
 const chartOptions = {
   responsive: true,
@@ -129,10 +134,41 @@ const chartOptions = {
     title: { display: false },
   },
 }
+
+// --- Helpers
+function formatCurrency(value) {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value)
+}
+
+function formatDate(dateStr) {
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('vi-VN')
+}
+
+function translateStatus(status) {
+  switch (status) {
+    case 'CONFIRMED': return 'Đã xác nhận'
+    case 'CHECKED IN': return 'Đang ở'
+    case 'CHECKED OUT': return 'Đã trả phòng'
+    case 'CANCELED': return 'Đã hủy'
+    default: return status
+  }
+}
+
+function statusClass(status) {
+  switch (status) {
+    case 'CONFIRMED': return 'bg-green-100 text-green-800'
+    case 'CHECKED IN': return 'bg-blue-100 text-blue-800'
+    case 'CHECKED OUT': return 'bg-gray-200 text-gray-800'
+    case 'CANCELED': return 'bg-red-100 text-red-800'
+    default: return 'bg-gray-100 text-gray-800'
+  }
+}
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 .font-inter {
   font-family: 'Inter', sans-serif;
 }
