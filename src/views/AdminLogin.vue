@@ -5,22 +5,10 @@
 
       <form class="login-form" @submit.prevent="handleLogin">
         <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          v-model="email"
-          placeholder="Nhập email"
-          required
-        />
+        <input type="email" id="email" v-model="email" placeholder="Nhập email" required />
 
         <label for="password">Mật khẩu</label>
-        <input
-          type="password"
-          id="password"
-          v-model="password"
-          placeholder="Nhập mật khẩu"
-          required
-        />
+        <input type="password" id="password" v-model="password" placeholder="Nhập mật khẩu" required />
 
         <button type="submit">Đăng nhập</button>
       </form>
@@ -31,15 +19,37 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore();
 
 const email = ref('')
 const password = ref('')
 const router = useRouter()
 
-const handleLogin = () => {
+const handleLogin = async () => {
   if (email.value && password.value) {
-    localStorage.setItem('isLoggedIn', 'true')
-    router.push('/') // Về trang chính (có header và sidebar)
+    try {
+      let res = await fetch("http://localhost:8080/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "Application/json"
+        },
+        body: JSON.stringify({ email: email.value, password: password.value })
+      });
+      let data = await res.json();
+      if (data.code === 200) {
+        let accessToken = data.data.accessToken;
+        let user = data.data.userInfo;
+        userStore.setAccessToken(accessToken)
+        userStore.setUserInfo(user);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("user", JSON.stringify(user));
+        router.push('/')
+      }
+    } catch (error) {
+      console.error(error);
+    }
   } else {
     alert('Vui lòng nhập đầy đủ thông tin!')
   }

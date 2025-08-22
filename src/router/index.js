@@ -53,15 +53,36 @@ const router = createRouter({
 
 // ✅ Navigation Guard: Chặn truy cập nếu chưa đăng nhập
 router.beforeEach((to, from, next) => {
-  const isLoggedIn = localStorage.getItem('isLoggedIn')
+  const accessToken = localStorage.getItem('accessToken');
 
-  if (to.path !== '/admin-login' && !isLoggedIn) {
-    next('/admin-login')
-  } else if (to.path === '/admin-login' && isLoggedIn) {
-    next('/')
+  if (!accessToken) {
+    if (to.path !== '/admin-login') {
+      return next('/admin-login');
+    } else {
+      return next();
+    }
   } else {
-    next()
+      return next();
+
   }
+
+  // fetch("http://localhost:8080/api/public/health-check-token", {
+  //   headers: {
+  //     "Authorization": "Bearer " + accessToken
+  //   }
+  // }).then(res => res.json())
+  //   .then(body => {
+  //     if (body.code === 200) {
+  //       if (to.path === '/admin-login') {
+  //         next('/')
+  //       } else {
+  //         next()
+  //       }
+  //     } else {
+  //       localStorage.removeItem("accessToken");
+  //       next('/admin-login')
+  //     }
+  //   });
 })
 
 
