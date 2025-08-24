@@ -31,5 +31,8 @@
   "main": "vite.config.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": "20.x"
+  }
 }
