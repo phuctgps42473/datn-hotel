@@ -32,7 +32,7 @@
               <td class="px-6 py-4 text-sm text-gray-500">{{ room.roomTypeName }}</td>
               <td class="px-6 py-4 text-sm text-gray-500">{{ room.pricePerNight }}</td>
               <td class="px-6 py-4 text-sm text-gray-500">{{ room.capacity }}</td>
-              <td class="px-6 py-4 text-sm text-gray-500">{{ room.description }}</td>
+              <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ room.description }}</td>
               <td class="px-6 py-4 text-sm">
                 <span :class="getStatusClass(room.status).class">
                   {{ getStatusClass(room.status).text }}
