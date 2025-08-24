@@ -200,7 +200,7 @@ const totalElements = ref(0);
 
 const fetchRooms = async (page = 0, size = 6) => {
   try {
-    const res = await fetcher(`http://localhost:8080/api/admin/room?page=${page}&size=${size}`);
+    const res = await fetcher(`/admin/room?page=${page}&size=${size}`);
     const data = await res.json();
     if (data.code === 200) {
       rooms.value = data.data.content;
@@ -215,7 +215,7 @@ const fetchRooms = async (page = 0, size = 6) => {
 
 const fetchRoomTypes = async () => {
   try {
-    const res = await fetcher("http://localhost:8080/api/admin/room-type");
+    const res = await fetcher("/admin/room-type");
     const data = await res.json();
     roomtypes.value = data;
   } catch (err) {
@@ -225,7 +225,7 @@ const fetchRoomTypes = async () => {
 
 const fetchRoomImage = async (roomId) => {
   try {
-    const res = await fetcher(`http://localhost:8080/api/admin/room/${roomId}/images`);
+    const res = await fetcher(`/admin/room/${roomId}/images`);
     const data = await res.json();
     if (data.code === 200) {
       console.log(data.data);
@@ -330,11 +330,11 @@ async function saveRoom() {
 
   try {
     if (isEditMode.value) {
-      let res = await fetcher(`http://localhost:8080/api/admin/room/${editedRoom.value.id}`, "PUT", JSON.stringify(body));
+      let res = await fetcher(`/admin/room/${editedRoom.value.id}`, "PUT", JSON.stringify(body));
       success = true;
       room = await res.json()
     } else {
-      let res = await fetcher("http://localhost:8080/api/admin/room", "POST", JSON.stringify(body));
+      let res = await fetcher("/admin/room", "POST", JSON.stringify(body));
       success = true;
       room = await res.json()
     }
@@ -362,7 +362,7 @@ async function saveRoom() {
 
       let accessToken = localStorage.getItem("accessToken");
       try {
-        const response = await fetch(`http://localhost:8080/api/admin/room/${room.id}/images`,
+        const response = await fetch(`/admin/room/${room.id}/images`,
           {
             headers: {
               "Authorization": "Bearer " + accessToken

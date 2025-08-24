@@ -148,7 +148,7 @@ const totalElements = ref(0);
 // Function to fetch staffs with pagination
 const fetchStaffs = async (page = 0, size = 6) => {
   try {
-    const res = await fetcher(`http://localhost:8080/api/admin/staff?page=${page}&size=${size}`);
+    const res = await fetcher(`/admin/staff?page=${page}&size=${size}`);
     if (!res.ok) throw new Error('Network error');
     let data = await res.json();
     if (data.code === 200) {
@@ -224,7 +224,7 @@ async function saveChanges() {
 
   if (isEditMode.value) {
     try {
-      let res = await fetcher("http://localhost:8080/api/admin/staff/" + editedUser.value.id, "PUT", JSON.stringify(newStaff));
+      let res = await fetcher("/admin/staff/" + editedUser.value.id, "PUT", JSON.stringify(newStaff));
       let data = await res.json()
       if (data.code === 200) {
         await fetchStaffs(currentPage.value, pageSize.value)
@@ -234,7 +234,7 @@ async function saveChanges() {
     }
   } else {
     try {
-      let res = await fetcher("http://localhost:8080/api/admin/staff", "POST", JSON.stringify(newStaff));
+      let res = await fetcher("/admin/staff", "POST", JSON.stringify(newStaff));
       let data = await res.json()
       if (data.code === 201) {
         // Sau khi thêm mới, nên quay về trang đầu tiên để thấy nhân viên mới

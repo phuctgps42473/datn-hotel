@@ -234,7 +234,7 @@ const totalElements = ref(0);
 
 const fetchBookings = async (page = 0, size = 6, status = 'CONFIRMED') => {
   try {
-    const res = await fetcher(`http://localhost:8080/api/admin/bookings?page=${page}&size=${size}&status=${status}`);
+    const res = await fetcher(`/admin/bookings?page=${page}&size=${size}&status=${status}`);
     const data = await res.json();
     if (data.code === 200) {
       bookings.value = data.data.content;
@@ -255,8 +255,8 @@ const fetchBookings = async (page = 0, size = 6, status = 'CONFIRMED') => {
 const fetchInitialData = async () => {
   try {
     const [roomRes, serviceRes] = await Promise.all([
-      fetcher("http://localhost:8080/api/admin/bookings/rooms"),
-      fetcher("http://localhost:8080/api/services")
+      fetcher("/admin/bookings/rooms"),
+      fetcher("/services")
     ]);
     const roomData = await roomRes.json();
     if (roomData.code === 200) roomsForBooking.value = roomData.data;
@@ -375,7 +375,7 @@ async function saveBooking() {
         payments: updatePayments.value,
         status: editedBooking.value.status
       };
-      await fetcher(`http://localhost:8080/api/admin/bookings/${editedBooking.value.id}`, 'PUT', JSON.stringify(payload));
+      await fetcher(`/admin/bookings/${editedBooking.value.id}`, 'PUT', JSON.stringify(payload));
     } else {
       const payload = {
         roomId: editedBooking.value.roomId,
@@ -387,7 +387,7 @@ async function saveBooking() {
         payments: editedBooking.value.payments,
         status: editedBooking.value.status
       };
-      await fetcher('http://localhost:8080/api/admin/bookings', 'POST', JSON.stringify(payload));
+      await fetcher('/admin/bookings', 'POST', JSON.stringify(payload));
     }
 
     alert('Lưu đặt phòng thành công!');

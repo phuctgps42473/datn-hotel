@@ -1,4 +1,7 @@
-export async function fetcher(path, method = "GET", body) {
+import { BASE_URL } from "@/const";
+
+
+export async function fetcher(endpoint, method = "GET", body) {
   let accessToken = localStorage.getItem("accessToken");
   let headers = { "Content-Type": "Application/json" };
   if (typeof accessToken !== "undefined") {
@@ -6,13 +9,13 @@ export async function fetcher(path, method = "GET", body) {
   }
 
   if (typeof body !== "undefined") {
-    return fetch(path, {
+    return fetch(BASE_URL + endpoint, {
       method,
       headers,
       body
     });
   } else {
-    return fetch(path, {
+    return fetch(BASE_URL + endpoint, {
       method,
       headers
     });

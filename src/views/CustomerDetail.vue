@@ -187,7 +187,7 @@ const totalElements = ref(0);
 // Function to fetch customers with pagination
 const fetchCustomers = async (page = 0, size = 6) => {
   try {
-    const res = await fetcher(`http://localhost:8080/api/admin/user?page=${page}&size=${size}`);
+    const res = await fetcher(`/admin/user?page=${page}&size=${size}`);
     if (!res.ok) throw new Error('Network error');
     let data = await res.json();
     if (data.code === 200) {
@@ -224,7 +224,7 @@ function openEditPopup(user) {
 async function openBookingPopup(customerId) {
   // Thay thế bằng API call thực tế
   try {
-    const res = await fetcher(`http://localhost:8080/api/admin/booking/user/${customerId}`);
+    const res = await fetcher(`/admin/booking/user/${customerId}`);
     if (!res.ok) throw new Error('Network error');
     const data = await res.json();
     if (data.code === 200) {
@@ -242,7 +242,7 @@ async function saveChanges() {
   if (!confirmed) return;
 
   try {
-    const res = await fetcher("http://localhost:8080/api/admin/user/" + editedUser.value.id, "PUT", JSON.stringify({ isActive: editedUser.value.isActive }));
+    const res = await fetcher("/admin/user/" + editedUser.value.id, "PUT", JSON.stringify({ isActive: editedUser.value.isActive }));
     if (!res.ok) throw new Error("Failed to update");
 
     // Refresh the current page data

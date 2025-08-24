@@ -144,7 +144,7 @@ const totalElements = ref(0);
 // ========== HÀM LẤY DỮ LIỆU (CÓ PHÂN TRANG VÀ TRẠNG THÁI) ==========
 const fetchRequests = async (page = 0, size = 6, status = 'OPEN') => {
   try {
-    const res = await fetcher(`http://localhost:8080/api/admin/customer-requests?page=${page}&size=${size}&status=${status}`);
+    const res = await fetcher(`/admin/customer-requests?page=${page}&size=${size}&status=${status}`);
     const data = await res.json();
     if (data.code === 200) {
       tickets.value = data.data.content;
@@ -199,7 +199,7 @@ async function submitReply() {
   if (!confirmSubmit) return;
 
   try {
-    await fetcher(`http://localhost:8080/api/admin/customer-requests/${selectedTicket.value.requestID}`, "PUT",
+    await fetcher(`/admin/customer-requests/${selectedTicket.value.requestID}`, "PUT",
       JSON.stringify({ message: replyContent.value })
     );
 

@@ -109,7 +109,7 @@ const apiData = ref({
 })
 
 onMounted(async () => {
-  let res = await fetcher("http://localhost:8080/api/admin/dashboard");
+  let res = await fetcher("/admin/dashboard");
   const data = await res.json();
   console.log(data);
   apiData.value = data
