@@ -20,6 +20,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { fetcher } from '@/utils/fetcher';
 
 const userStore = useUserStore();
 
@@ -30,13 +31,7 @@ const router = useRouter()
 const handleLogin = async () => {
   if (email.value && password.value) {
     try {
-      let res = await fetch("http://localhost:8080/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "Application/json"
-        },
-        body: JSON.stringify({ email: email.value, password: password.value })
-      });
+      let res = await fetcher("/login", "POST", JSON.stringify({ email: email.value, password: password.value }));
       let data = await res.json();
       if (data.code === 200) {
         let accessToken = data.data.accessToken;
