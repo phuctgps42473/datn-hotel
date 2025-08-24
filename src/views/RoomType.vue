@@ -80,6 +80,7 @@
 </template>
 
 <script setup>
+import { fetcher } from '@/utils/fetcher';
 import { onMounted, ref } from 'vue';
 
 const roomTypes = ref([]);
@@ -91,7 +92,7 @@ const originalData = ref({});
 
 onMounted(async () => {
   try {
-    const res = await fetch("http://localhost:8080/api/admin/room-type")
+    const res = await fetcher("/admin/room-type")
     if (!res.ok) throw new Error('Network error')
     let data = await res.json()
     roomTypes.value = data;
@@ -133,13 +134,7 @@ async function saveEdit() {
 
   if (isEditMode.value && typeof editedType.value.id !== "undefined") {
     try {
-      let res = await fetch("http://localhost:8080/api/admin/room-type/" + editedType.value.id, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "Application/json"
-        },
-        body: JSON.stringify(editedType.value)
-      });
+      let res = await fetcher("/admin/room-type/" + editedType.value.id, "PUT", JSON.stringify(editedType.value));
       let data = await res.json()
       const index = roomTypes.value.findIndex(r => r.id === editedType.value.id);
       roomTypes.value[index] = { ...data };
@@ -148,13 +143,7 @@ async function saveEdit() {
     }
   } else {
     try {
-      let res = await fetch("http://localhost:8080/api/admin/room-type", {
-        method: "POST",
-        headers: {
-          "Content-Type": "Application/json"
-        },
-        body: JSON.stringify(editedType.value)
-      });
+      let res = await fetcher("/admin/room-type", "POST", JSON.stringify(editedType.value));
       let data = await res.json()
       roomTypes.value.push(data);
     } catch (error) {
@@ -169,10 +158,7 @@ async function saveEdit() {
 async function deleteRoomType(roomTypeId) {
   if (confirm("Xác nhận xoá phòng?")) {
     try {
-      let res = await fetch("http://localhost:8080/api/admin/room-type/" + roomTypeId, {
-        method: "DELETE",
-      });
-      console.log(res);
+      let res = await fetcher("/admin/room-type/" + roomTypeId, "DELETE");
       const index = roomTypes.value.findIndex(r => r.id === editedType.value.id);
       roomTypes.value.splice(index, 1);
     } catch (error) {

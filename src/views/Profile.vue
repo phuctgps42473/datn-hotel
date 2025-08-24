@@ -95,6 +95,7 @@
 
 <script setup>
 import { useUserStore } from '@/stores/user';
+import { fetcher } from '@/utils/fetcher';
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -129,22 +130,8 @@ function updateAvatar(event) {
 
 function logout() {
   if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-    const accessToken = localStorage.getItem('accessToken');
-
-    // if (!accessToken) {
-    //   if (to.path !== '/admin-login') {
-    //     return next('/admin-login');
-    //   } else {
-    //     return next(); // stay on login page
-    //   }
-    // }
-
     try {
-      fetch("http://localhost:8080/api/logout", {
-        headers: {
-          "Authorization": "Bearer " + accessToken
-        }
-      }).then(res => res.json()).then(console.log);
+      fetcher("/logout").then(res => res.json()).then(console.log);
       localStorage.clear('accessToken');
       router.push('/admin-login')
     } catch (e) {

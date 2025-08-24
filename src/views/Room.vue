@@ -362,7 +362,7 @@ async function saveRoom() {
 
       let accessToken = localStorage.getItem("accessToken");
       try {
-        const response = await fetch(`/admin/room/${room.id}/images`,
+        const response = await fetcher(`/admin/room/${room.id}/images`,
           {
             headers: {
               "Authorization": "Bearer " + accessToken
