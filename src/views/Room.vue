@@ -28,7 +28,7 @@
           <tbody class="bg-white divide-y divide-gray-200">
             <tr v-for="room in rooms" :key="room.id">
               <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ room.roomNumber }}</td>
-              <td class="px-6 py-4 text-sm text-gray-500">{{ room.amenities }}</td>
+              <td class="px-6 py-4 text-sm text-gray-500 max-w-[50px] truncate">{{ room.amenities }}</td>
               <td class="px-6 py-4 text-sm text-gray-500">{{ room.roomTypeName }}</td>
               <td class="px-6 py-4 text-sm text-gray-500">{{ room.pricePerNight }}</td>
               <td class="px-6 py-4 text-sm text-gray-500">{{ room.capacity }}</td>
@@ -181,6 +181,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import { fetcher } from "@/utils/fetcher";
+import { BASE_URL } from '@/const';
 
 const rooms = ref([]);
 const roomtypes = ref([]);
@@ -362,7 +363,7 @@ async function saveRoom() {
 
       let accessToken = localStorage.getItem("accessToken");
       try {
-        const response = await fetcher(`/admin/room/${room.id}/images`,
+        const response = await fetch(BASE_URL + `/admin/room/${room.id}/images`,
           {
             headers: {
               "Authorization": "Bearer " + accessToken
